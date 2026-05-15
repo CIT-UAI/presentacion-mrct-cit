@@ -773,11 +773,10 @@ Usar este mapa para explorar las cuencas dentro de buffers de 50 km alrededor de
 
 - Primera versión de la **Matriz de Resiliencia Climática Territorial**.
 - Resultados regionales, comunales y casos prioritarios para Punta Arenas.
-- Libro digital para documentar metodología, decisiones técnicas y evidencia.
+- [Libro digital](https://cit-uai.github.io/Book-MRCT/) para documentar metodología, decisiones técnicas y evidencia.
 - Librería Python de alto nivel para calcular indicadores y componentes de la matriz.
-- Notebooks **Jupyter** con código documentado para calcular la matriz y todos sus subproductos. Además para análisis de resultados, visualizaciones y selección de cuencas prioritarias.
+- Notebooks **Jupyter** con código documentado para calcular la matriz y todos sus subproductos. Además para análisis de resultados, visualizaciones y selección de cuencas prioritarias. (acceso local [jupyter lab](http://localhost:8888/lab/tree/jupyter-notebooks/MRCT_Tutorial_Academico/MRCT_Tutorial_Academico.ipynb))
 
-<https://cit-uai.github.io/Book-MRCT/>
 
 :::
 ::: {.column .p_small_m width="10%"}
