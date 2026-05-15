@@ -194,20 +194,29 @@ Explicar que la cuenca funciona como unidad funcional: conecta relieve, escorren
 
 :::: {.columns}
 
-::: {.column .p_small width="38%"}
+::: {.column .p_small width="50%"}
 [Arquitectura MRCT]{.mrct-kicker}
 [Cada etapa toma el producto anterior y agrega una capa de interpretación.]{.mrct-big}
 
-- De señal satelital a indicadores territoriales.
-- De indicadores a estado ecosistémico.
-- De estado a trayectoria, contexto y sensibilidad.
-- De trayectoria integrada a prioridad territorial.
+<br>
+
+- **0 Insumos satelitales:** captura señales espectrales base.
+- **1 Indicadores por cuenca:** resume esas señales como métricas territoriales anuales.
+- **2 Vector de estado:** integra los indicadores en una posición ecosistémica.
+- **3 Trayectoria:** mide distancia, velocidad, aceleración y cambios bruscos.
+- **4 Integración espacial:** compara cada cuenca con su vecindario territorial.
+- **5 Sensibilidad:** estima respuesta frente a forzantes climáticos.
+- **6 Prioridad y resiliencia:** sintetiza presión, transición y capacidad de respuesta.
+
 
 :::
 
-::: {.column width="58%"}
+::: {.column .p_small_m width="5%"}
+:::
 
+::: {.column width="45%"}
 
+<br>
 
 ![](images/infografia_mrct_hor_w.png){fig-align="center" width="95%"}
 
@@ -238,6 +247,8 @@ Usar esta lámina como mapa de navegación. No explicar todavía cada fórmula; 
 - Los índices traducen reflectancia en vegetación, agua, nieve, aridez, albedo y temperatura.
 - Para este cálculo, los insumos ya llegan limpios, alineados y listos para agregarse por cuenca.
 
+<https://cit-uai.github.io/Book-MRCT/insumos.html>
+
 :::
 
 ::: {.column .p_small_m width="5%"}
@@ -261,7 +272,7 @@ Explicar que este paso es condición de entrada. El levantamiento, limpieza y co
 
 :::: {.columns}
 
-::: {.column .p_small width="40%"}
+::: {.column .p_small width="45%"}
 [Traducción territorial]{.mrct-kicker}
 [Los índices dejan de ser pixeles y pasan a ser señales por cuenca.]{.mrct-big}
 
@@ -270,10 +281,13 @@ Explicar que este paso es condición de entrada. El levantamiento, limpieza y co
 - Vegetación y energía capturan cobertura, vigor, aridez y carga térmica.
 - Cada cuenca queda con una serie anual comparable.
 
+<br>
+<https://cit-uai.github.io/Book-MRCT/inds_base.html>
+
 :::
 ::: {.column .p_small_m width="10%"}
 :::
-::: {.column .mrct-image width="50%"}
+::: {.column .mrct-image width="45%"}
 ![](images/indicadores_base2.png){fig-align="right" width="100%"}
 
 :::
@@ -299,11 +313,16 @@ Conectar esta lámina con la fase 1 de la infografía. La idea es que los índic
 - Permite comparar cuencas y años sin mirar variables aisladas.
 - La matriz completa contiene **21.040 cuencas x 13 años**.
 
+
+
 $$
 \mathbf{T} \in \mathbb{R}^{N \times Y \times d}
 $$
 
 `N`: cuencas · `Y`: años · `d`: indicadores del estado ecosistémico.
+
+<br>
+<https://cit-uai.github.io/Book-MRCT/vector_es.html>
 
 :::
 
@@ -311,7 +330,12 @@ $$
 :::
 
 ::: {.column .mrct-image width="50%"}
-![](images/vector_estado.png){fig-align="center" width="80%"}
+<center>
+![](images/vector_estado.png){fig-align="center" width="40%"}
+</center>
+![](images/cubo.png){fig-align="center" width="100%"}
+
+
 
 :::
 
@@ -356,6 +380,8 @@ $$
 
 `D`: distancia al dominio · `V`: velocidad · `A`: aceleración · `J`: cambio brusco de la aceleración.
 
+<br>
+
 :::
 
 ::: {.column .p_small_m width="5%"}
@@ -364,6 +390,10 @@ $$
 ::: {.column .mrct-image width="52%"}
 ![](images/dominio.png){fig-align="center" width="100%"}
 <center>![](images/f3.png){fig-align="center" width="60%"}</center>
+
+
+<https://cit-uai.github.io/Book-MRCT/trayectoria.html>
+
 :::
 
 ::::
@@ -390,16 +420,17 @@ Explicar que la trayectoria no existe sin la distancia `D`: primero se define el
 
 
 
-<!-- $$ -->
-<!-- \bar{D}_{local,i,t} = -->
-<!-- \sum_{j \in N_k(i)} \tilde{w}_{ij} D_{j,t} -->
-<!-- $$ -->
+$$
+\bar{D}_{local,i,t} =
+\sum_{j \in N_k(i)} \tilde{w}_{ij} D_{j,t}
+$$
 ![](images/f4.png){fig-align="center" width="100%"}
 <!-- - **Global bajo + local bajo:** condición cercana y coherente. -->
 <!-- - **Global alto + local bajo:** señal regional compartida. -->
 <!-- - **Global bajo + local alto:** anomalía local. -->
 <!-- - **Global alto + local alto:** caso prioritario de revisión. -->
 
+<https://cit-uai.github.io/Book-MRCT/integracion_espacial.html>
 
 :::
 
@@ -450,6 +481,9 @@ $$
 - IA: aridez; ALB: albedo; TB: temperatura de brillo.
 - Sensibilidad alta no significa peor estado: significa mayor reactividad.
 
+
+<https://cit-uai.github.io/Book-MRCT/sensibilidad.html>
+
 :::
 
 ::: {.column width="52%"}
@@ -477,7 +511,7 @@ Recalcar que sensibilidad mide reactividad, no diagnóstico final. Cobra sentido
 
 :::: {.columns}
 
-::: {.column .p_small width="42%"}
+::: {.column .p_small width="50%"}
 [Síntesis territorial]{.mrct-kicker}
 [El resultado combina estado, movimiento, sensibilidad y contexto.]{.mrct-big}
 
@@ -502,19 +536,24 @@ $$
 
 `D`: alejamiento · `|V|`: intensidad del cambio · `SENS`: reactividad · `D_local`: presión o contraste espacial.
 
+<https://cit-uai.github.io/Book-MRCT/pt_resiliencia.html>
+
 :::
 
 ::: {.column .p_small_m width="5%"}
 :::
 
 
-::: {.column .mrct-image width="52%"}
+::: {.column .mrct-image width="45%"}
 
 <br>
 <br>
 
 <center>![](images/f6.png){fig-align="center" width="100%"}</center>
-<!-- ![](images/resultados/mapa_res_pt_2025.png){fig-align="center" width="100%"} -->
+
+<br>
+
+![](images/pt.png){fig-align="center" width="100%"}
 
 :::
 
@@ -541,6 +580,8 @@ Esta es la lámina de cálculo más importante. Mostrar la lógica antes que la 
 - `RES_TYPE` agrega dirección: estable, tensionada, recuperación, degradación activa o transición.
 - La matriz ordena evidencia y preguntas, no reemplaza validación territorial.
 
+
+<https://cit-uai.github.io/Book-MRCT/resultados.html>
 :::
 
 ::: {.column .mrct-image width="52%"}
@@ -561,7 +602,7 @@ Evitar decir “peores cuencas” como lectura única. Usar “cuencas prioritar
 
 :::: {.columns}
 
-::: {.column .p_small width="42%"}
+::: {.column .p_small width="45%"}
 [Magallanes 2025]{.mrct-kicker}
 [La señal regional es heterogénea y polarizada.]{.mrct-big}
 
@@ -570,10 +611,15 @@ Evitar decir “peores cuencas” como lectura única. Usar “cuencas prioritar
 - **54,5%** de cuencas en colapso potencial.
 - Punta Arenas tiene mediana alta, pero fuerte heterogeneidad interna.
 
+<https://cit-uai.github.io/Book-MRCT/resultados.html>
+
 :::
 
-::: {.column .mrct-image width="52%"}
-![](images/resultados/res_mediana_comunal_2025.png){fig-align="center" width="100%"}
+::: {.column .p_small_m width="5%"}
+:::
+
+::: {.column .mrct-image width="50%"}
+![](images/resultados/mapa_res_pt_2025.png){fig-align="center" width="100%"}
 
 [La comparación comunal debe leerse junto con mapas y percentiles.]{.mrct-caption}
 
@@ -626,6 +672,8 @@ Usar el mapa como lámina de exploración. La idea es ubicar espacialmente cuenc
 - El ranking combina `J`, `PT`, `RES`, `D_local`, `SENS` y accesibilidad.
 - La salida es una lista de candidatas, no una ruta final.
 
+
+<https://cit-uai.github.io/Book-MRCT/jerk.html>
 :::
 
 ::: {.column .mrct-image width="52%"}
@@ -684,6 +732,8 @@ Recalcar que el mapa ayuda a pasar desde un ranking tabular a una pregunta espac
 - La pregunta de terreno es preventiva: ¿qué cuencas cercanas a infraestructura estratégica ya muestran cambios abruptos?
 - Esta capa complementa el ranking, no reemplaza la validación ambiental.
 
+<https://cit-uai.github.io/Book-MRCT/jerk.html#sec-terminales-h2-jerk>
+
 :::
 
 ::: {.column .mrct-image width="52%"}
@@ -722,9 +772,10 @@ Usar este mapa para explorar las cuencas dentro de buffers de 50 km alrededor de
 [La MRCT ya tiene una primera versión funcional.]{.mrct-big}
 
 - Primera versión de la **Matriz de Resiliencia Climática Territorial**.
-- Librería Python de alto nivel para calcular indicadores y componentes de la matriz.
 - Resultados regionales, comunales y casos prioritarios para Punta Arenas.
 - Libro digital para documentar metodología, decisiones técnicas y evidencia.
+- Librería Python de alto nivel para calcular indicadores y componentes de la matriz.
+- Notebooks **Jupyter** con código documentado para calcular la matriz y todos sus subproductos. Además para análisis de resultados, visualizaciones y selección de cuencas prioritarias.
 
 <https://cit-uai.github.io/Book-MRCT/>
 
