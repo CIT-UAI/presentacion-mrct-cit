@@ -1,0 +1,357 @@
+---
+title: "Selección de Cuencas"
+subtitle: "Priorización para trabajo de terreno mediante análisis de jerk y zonas estratégicas"
+---
+
+Este capítulo actualiza la selección de cuencas candidatas para trabajo de terreno a partir de la nueva versión del notebook `MRCT_Cuencas_Prioritarias_Jerk.ipynb`. El análisis usa el **jerk** de la Matriz de Resiliencia Climática Territorial para detectar cambios abruptos en la trayectoria ecosistémica y concentra la priorización en el entorno operacional de Punta Arenas.
+
+La versión actual incorpora una mejora importante: además de seleccionar cuencas para validación general, agrega zonas de búsqueda asociadas a **puertos y terminales estratégicos para hidrógeno verde**. Esta capa permite observar cuencas próximas a infraestructura relevante para la transformación energética regional, donde eventuales nuevas intervenciones podrían interactuar con condiciones ecosistémicas ya inestables.
+
+::: {.callout-note}
+## Alcance de la selección
+
+La lista de cuencas prioritarias es una **preselección técnica**. No equivale a una ruta final de terreno ni a una evaluación de impacto ambiental. Antes de definir una campaña deben revisarse accesos reales, permisos, seguridad, clima, propiedad, restricciones operativas y conocimiento local.
+:::
+
+## Pregunta de trabajo {#sec-pregunta-jerk-terreno}
+
+La pregunta que orienta esta versión del análisis es:
+
+> ¿Qué cuencas del entorno operacional de Punta Arenas muestran cambios abruptos recientes en su trayectoria ecosistémica, y cuáles de ellas se relacionan espacialmente con zonas portuarias o terminales relevantes para el desarrollo de hidrógeno verde?
+
+La pregunta se separa en cinco componentes:
+
+- Identificar eventos abruptos medidos por jerk en la serie MRCT 2013-2025;
+- distinguir entre intensificación y reversión de la trayectoria;
+- filtrar cuencas dentro de un área operacional definida desde Punta Arenas;
+- ordenar las candidatas mediante un puntaje compuesto robusto a valores extremos;
+- revisar cuencas cercanas a terminales marítimos relevantes para el traslado o exportación de hidrógeno verde y derivados.
+
+## Qué mide el jerk {#sec-criterio-jerk}
+
+La MRCT calcula para cada cuenca y año una variable de dominio, `Domain` o $D$, que representa la distancia de la cuenca respecto de su estado ecosistémico de referencia. A partir de esa trayectoria se calculan derivadas temporales:
+
+- $D$: distancia al régimen de referencia;
+- $V$: velocidad de cambio de esa distancia;
+- $A$: aceleración del cambio;
+- $J$: cambio de la aceleración, o jerk.
+
+En términos operativos, el jerk identifica una ruptura en la dinámica. Un valor alto en magnitud indica que la cuenca experimentó un salto abrupto en su trayectoria. Esa señal no debe interpretarse automáticamente como degradación, recuperación o causalidad comprobada: funciona como una alerta para mirar con mayor detalle.
+
+```{mermaid}
+%%| label: fig-derivadas-jerk
+%%| fig-cap: "Derivadas temporales usadas para interpretar cambios abruptos en la trayectoria ecosistémica."
+flowchart TB
+  D["Domain (D)<br/>Distancia al <br/>estado de referencia"] --> V["Velocidad (dD/dt)<br/>Direccion y ritmo del cambio"]
+  V --> A["Aceleracion (d2D/dt2)<br/>Cambio en el ritmo"]
+  A --> J["Jerk (d3D/dt3)<br/>Cambio abrupto en la aceleracion"]
+  J --> I["J > 0<br/>Intensificacion"]
+  J --> R["J < 0<br/>Reversion"]
+```
+
+El signo entrega una primera lectura:
+
+| Tipo de evento | Condición | Lectura preliminar |
+|---|---|---|
+| Intensificación | $J > 0$ | Aceleración brusca del cambio respecto del dominio de referencia. Puede sugerir presión, perturbación o deterioro emergente. |
+| Reversión | $J < 0$ | Frenada o inversión brusca de la trayectoria. Puede sugerir recuperación, estabilización, cambio de régimen o artefacto de datos. |
+
+: Lectura básica del signo del jerk para selección de cuencas. {#tbl-signo-jerk}
+
+Esta distinción es útil para terreno porque permite formular preguntas distintas. Una cuenca con intensificación puede requerir observar señales de presión reciente; una cuenca con reversión puede requerir revisar si existe recuperación visible, cambio hidrológico, variación de nieve, intervención local o inconsistencia en la serie satelital.
+
+## Insumos y base analítica {#sec-estructura-datos-jerk}
+
+El flujo usa dos insumos principales:
+
+| Insumo | Contenido | Uso en el análisis |
+|---|---|---|
+| `MRCT_v1.xlsx` | Panel MRCT completo, con 273.520 registros, 21.040 cuencas y 13 años. | Base temporal `RID x Year` para calcular eventos de jerk y cruzarlos con métricas MRCT. |
+| `R12_cuencas_nema_v2.shp` | Geometría de 21.040 cuencas de Magallanes. | Base espacial para centroides, distancias, comunas, buffers y mapas. |
+
+: Insumos principales del análisis de cuencas prioritarias por jerk. {#tbl-insumos-jerk}
+
+El panel completo cubre 2013-2025. Los primeros años no tienen jerk válido por definición, porque el cálculo necesita años previos para estimar la tercera derivada discreta. El análisis conserva la serie completa para control de calidad y lectura temporal, y luego usa eventos extremos y filtros espaciales para priorizar terreno.
+
+La geometría fue transformada al sistema EPSG:32719, que permite trabajar en coordenadas métricas para calcular distancias aproximadas desde Punta Arenas y desde cada terminal marítimo.
+
+```{mermaid}
+%%| label: fig-flujo-base-jerk
+%%| fig-cap: "Flujo lineal de construcción de la base analítica y productos de priorización."
+flowchart TB
+  config["Configuracion<br/>rutas, coordenadas  <br/>y parametros"] --> data["Datos<br/>MRCT y cuencas"]
+  data --> parquet["Parquet<br/>lectura rapida"]
+  parquet --> duck["DuckDB<br/>base analitica local"]
+  duck --> qc["Control de calidad<br/>cobertura y clases"]
+  qc --> events["Eventos de jerk<br/>percentiles anual y global"]
+  events --> buffer["Buffer PA<br/>radio adaptativo"]
+  buffer --> score["P_score<br/>puntaje compuesto"]
+  score --> top10["10 cuencas<br/>prioritarias"]
+  top10 --> terminals["Terminales H2<br/>buffers de 50 km"]
+  terminals --> export["Exportacion<br/>Excel, SHP y DuckDB"]
+```
+
+La base DuckDB queda organizada en seis tablas:
+
+| Tabla | Contenido | Uso posterior |
+|---|---|---|
+| `mrct_panel` | Panel MRCT completo. | Consultar trayectorias, resiliencia, dominio, velocidad, aceleración y jerk. |
+| `basins` | Atributos y geometría resumida de cuencas. | Construir mapas, cruces espaciales y visualizaciones. |
+| `accessibility` | Centroide, distancia a Punta Arenas, comuna, anillo y pertenencia comunal. | Filtrar cuencas por factibilidad preliminar. |
+| `jerk_events` | Eventos con jerk no nulo, percentiles, signo y clase. | Identificar eventos extremos por año, comuna o tipo de evento. |
+| `field_priority` | Ranking final de las diez cuencas seleccionadas dentro del buffer. | Alimentar reportes, fichas de terreno y mapas. |
+| `terminal_results` | Cuencas calificadas por terminal de hidrógeno verde. | Revisar señales ecosistémicas cerca de infraestructura estratégica. |
+
+: Esquema de tablas creado para sostener consultas posteriores. {#tbl-esquema-duckdb-jerk}
+
+## Control de calidad y cobertura {#sec-control-calidad-jerk}
+
+Antes de priorizar cuencas se revisó la disponibilidad anual de jerk. La tabla distingue el total regional de cuencas, las cuencas con jerk válido y el porcentaje de cobertura.
+
+| Año | Cuencas totales | Cuencas con jerk | Cobertura |
+|---:|---:|---:|---:|
+| 2013 | 21.040 | 0 | 0,0% |
+| 2014 | 21.040 | 0 | 0,0% |
+| 2015 | 21.040 | 0 | 0,0% |
+| 2016 | 21.040 | 7.999 | 38,0% |
+| 2017 | 21.040 | 6.603 | 31,4% |
+| 2018 | 21.040 | 6.932 | 32,9% |
+| 2019 | 21.040 | 6.744 | 32,1% |
+| 2020 | 21.040 | 6.921 | 32,9% |
+| 2021 | 21.040 | 8.390 | 39,9% |
+| 2022 | 21.040 | 4.936 | 23,5% |
+| 2023 | 21.040 | 3.833 | 18,2% |
+| 2024 | 21.040 | 3.692 | 17,5% |
+| 2025 | 21.040 | 3.770 | 17,9% |
+
+: Disponibilidad regional de jerk en la serie MRCT 2013-2025. {#tbl-disponibilidad-jerk}
+
+La baja cobertura relativa obliga a usar percentiles con cautela. La ausencia de jerk válido en una cuenca no implica estabilidad ecosistémica; puede reflejar falta de datos suficientes, calidad de observación, restricciones de cálculo o problemas de disponibilidad en los insumos anuales.
+
+La distribución completa de clases en el panel es:
+
+| Clase de jerk | Eventos |
+|---|---:|
+| Neutro | 227.365 |
+| Intensificación leve | 12.107 |
+| Reversión leve | 12.000 |
+| Reversión fuerte | 11.205 |
+| Intensificación fuerte | 10.843 |
+
+: Distribución de clases de jerk en el panel MRCT. {#tbl-clases-jerk}
+
+## Eventos extremos de jerk {#sec-eventos-jerk}
+
+El análisis materializó **59.820 eventos** con jerk no nulo en **11.517 cuencas**. Para cada evento se calcularon dos percentiles:
+
+- percentil anual, que compara una cuenca con otras cuencas del mismo año;
+- percentil global, que compara el evento con todos los eventos de la serie.
+
+El percentil anual es el criterio principal de selección porque permite interpretar cada evento dentro de su contexto temporal. Un evento en p90 anual es relevante aunque el año completo haya sido menos activo que otros.
+
+| RID | Año | Jerk | Tipo | Percentil anual | `RES` | Comuna |
+|---:|---:|---:|---|---:|---:|---|
+| 20780 | 2016 | -19,3385 | Reversión | 100,0 | 0,00202 | Torres del Paine |
+| 12614 | 2024 | -18,1910 | Reversión | 100,0 | 0,00042 | Natales |
+| 16666 | 2024 | -17,5785 | Reversión | 100,0 | 0,00047 | Natales |
+| 16141 | 2025 | 17,4068 | Intensificación | 100,0 | 0,00022 | Natales |
+| 6537 | 2017 | -16,3079 | Reversión | 100,0 | 0,00321 | Cabo de Hornos |
+| 12521 | 2024 | 15,8616 | Intensificación | 99,9 | 0,00218 | Natales |
+| 963 | 2023 | 15,6354 | Intensificación | 100,0 | 0,10950 | Punta Arenas |
+| 19883 | 2021 | -15,4961 | Reversión | 100,0 | 0,00015 | Natales |
+| 43 | 2024 | -15,3694 | Reversión | 99,9 | 0,00130 | Punta Arenas |
+| 20069 | 2019 | 15,3110 | Intensificación | 100,0 | 0,02494 | Natales |
+
+: Diez eventos regionales de mayor magnitud absoluta de jerk. {#tbl-top-eventos-jerk}
+
+![Eventos regionales de mayor magnitud absoluta de jerk en la serie MRCT.](images/trabajo_terreno/MRCT_Cuencas_Prioritarias_Jerk_11_1.png){#fig-top-eventos-jerk fig-align="center" width="95%"}
+
+![Eventos regionales de jerk iguales o superiores al percentil 95. El mapa entrega contexto espacial antes de filtrar por el entorno operacional de Punta Arenas.](images/trabajo_terreno/MRCT_Cuencas_Prioritarias_Jerk_11_2.png){#fig-eventos-regionales-jerk fig-align="center" width="90%"}
+
+## Buffer operacional de Punta Arenas {#sec-cruce-territorial-jerk}
+
+La nueva versión del análisis abandona la selección regional 5+5 y usa un criterio único: **top 10 por `P_score` dentro del área operacional de Punta Arenas**.
+
+Una cuenca entra al conjunto candidato si cumple al menos una de estas condiciones:
+
+- pertenece a la comuna de Punta Arenas (`CUT_COM = 12101`);
+- su centroide está dentro del radio operativo adaptativo desde el centro urbano de Punta Arenas.
+
+El notebook explora combinaciones de radio y percentil anual. La combinación escogida fue **80 km** y **jerk igual o superior al p90 anual**, porque es el radio más pequeño evaluado que garantiza más de diez cuencas calificadas con el umbral más exigente.
+
+| Radio | Umbral anual | Cuencas calificadas |
+|---:|---:|---:|
+| 80 km | p90 | 364 |
+| 80 km | p85 | 484 |
+| 120 km | p90 | 443 |
+| 150 km | p90 | 634 |
+| 200 km | p90 | 1.100 |
+
+: Exploración de parámetros para el buffer operativo de Punta Arenas. {#tbl-parametros-buffer-jerk}
+
+```{mermaid}
+%%| label: fig-ajuste-buffer-jerk
+%%| fig-cap: "Lógica de diagnóstico del buffer operativo y ajuste de parámetros."
+flowchart TB
+  start["Parámetros iniciales<br/>radios 80, 120, 150, 200 km<br/>umbrales p90, p85, p80, p75"] --> count["Contar cuencas calificadas"]
+  count --> decision{"Hay al menos<br/>10 candidatas?"}
+  decision -- "Si" --> choose["Elegir radio menor<br/>con umbral mas exigente"]
+  decision -- "No" --> relax["Ampliar radio o relajar umbral"]
+  relax --> count
+  choose --> result["Resultado usado<br/>80 km + p90 anual<br/>364 cuencas"]
+```
+
+![Cuencas calificadas dentro del entorno operacional de Punta Arenas. La visualización se concentra en el área de análisis y no en toda la región.](images/trabajo_terreno/MRCT_Cuencas_Prioritarias_Jerk_14_0.png){#fig-buffer-jerk fig-align="center" width="100%"}
+
+## Puntaje de priorización {#sec-puntaje-jerk}
+
+Para pasar desde eventos individuales a cuencas candidatas se construyó un puntaje compuesto, denominado `P_score`. En esta versión, el puntaje se calcula **exclusivamente sobre las 364 cuencas calificadas del buffer**, no sobre todo el conjunto regional.
+
+$$P = 0,35 \cdot J^* + 0,20 \cdot R^* + 0,15 \cdot E^* + 0,15 \cdot L^* + 0,15 \cdot A^*$$
+
+| Componente | Variable base | Peso | Qué representa |
+|---|---|---:|---|
+| $J^*$ | `jerk_pct_global` | 0,35 | Magnitud relativa del evento abrupto. |
+| $R^*$ | `PT` | 0,20 | Potencial de transición o vulnerabilidad ecosistémica. |
+| $E^*$ | `Domain_local` | 0,15 | Diferencia de la cuenca respecto de su entorno local. |
+| $L^*$ | `SENS` | 0,15 | Sensibilidad climática o exposición a forzantes. |
+| $A^*$ | `1 - dist_pa_km` | 0,15 | Accesibilidad relativa dentro del conjunto candidato. |
+
+: Componentes del puntaje compuesto de prioridad. {#tbl-pesos-prioridad-jerk}
+
+Los componentes se normalizan por rango percentil dentro del buffer. Esto evita que valores extremos dominen la escala y hace que las dimensiones sean comparables. El rango observado de `P_score` fue de **0,078 a 0,886**.
+
+![Distribución espacial del `P_score` dentro del buffer operativo de Punta Arenas.](images/trabajo_terreno/MRCT_Cuencas_Prioritarias_Jerk_17_0.png){#fig-pscore-buffer-jerk fig-align="center" width="100%"}
+
+## Diez cuencas candidatas {#sec-diez-cuencas-jerk}
+
+La tabla siguiente presenta las diez cuencas priorizadas por el flujo actualizado. Todas pertenecen a la comuna de Punta Arenas y fueron seleccionadas por `P_score` dentro del conjunto candidato.
+
+| Prioridad | RID | Comuna | Año crítico | Jerk | Percentil anual | Tipo de evento | `RES` | Distancia a PA (km) | Anillo | `P_score` |
+|---:|---:|---|---:|---:|---:|---|---:|---:|---|---:|
+| 1 | 1641 | Punta Arenas | 2019 | 4,2523 | 97,1 | Intensificación | 0,00014 | 51,7 | Intermedio | 0,8856 |
+| 2 | 1298 | Punta Arenas | 2016 | -4,4038 | 99,3 | Reversión | 0,00028 | 65,7 | Intermedio | 0,8701 |
+| 3 | 1602 | Punta Arenas | 2017 | -8,0053 | 99,9 | Reversión | 0,00050 | 37,8 | Cercano | 0,8567 |
+| 4 | 440 | Punta Arenas | 2018 | 6,2027 | 98,9 | Intensificación | 0,00099 | 83,2 | Intermedio | 0,8539 |
+| 5 | 244 | Punta Arenas | 2017 | -5,7977 | 99,6 | Reversión | 0,00001 | 166,4 | Extendido | 0,8485 |
+| 6 | 2712 | Punta Arenas | 2018 | 4,8345 | 98,0 | Intensificación | 0,00144 | 83,2 | Intermedio | 0,8271 |
+| 7 | 465 | Punta Arenas | 2017 | -4,8793 | 99,2 | Reversión | 0,00012 | 153,9 | Extendido | 0,8043 |
+| 8 | 783 | Punta Arenas | 2016 | -3,8285 | 98,7 | Reversión | 0,00053 | 78,4 | Intermedio | 0,8026 |
+| 9 | 1553 | Punta Arenas | 2018 | -3,3516 | 94,7 | Reversión | 0,00049 | 59,3 | Intermedio | 0,8025 |
+| 10 | 1635 | Punta Arenas | 2020 | -3,2286 | 97,1 | Reversión | 0,00003 | 53,6 | Intermedio | 0,7966 |
+
+: Diez cuencas candidatas para validación en terreno según el flujo actualizado. {#tbl-diez-cuencas-prioritarias}
+
+La selección muestra una mezcla de intensificaciones y reversiones fuertes, con predominio de cuencas de resiliencia muy baja o `Colapso_Potencial`. Aunque varias cuencas están en anillo intermedio, dos permanecen en anillo extendido por pertenecer a la comuna de Punta Arenas pese a estar lejos del centro urbano. Esa diferencia debe quedar visible en la planificación logística.
+
+![Diez cuencas prioritarias dentro del entorno operacional de Punta Arenas, numeradas según `P_score`.](images/trabajo_terreno/MRCT_Cuencas_Prioritarias_Jerk_20_0.png){#fig-top10-jerk fig-align="center" width="100%"}
+
+## Lectura de series temporales {#sec-series-temporales-jerk}
+
+Para las tres cuencas de mayor puntaje se revisaron series temporales completas 2013-2025 de `Domain`, `Velocidad`, `Aceleracion`, `Jerk` y `RES`. Esta lectura es necesaria porque un ranking por jerk puede seleccionar picos aislados. La serie permite distinguir si el evento abrupto aparece como una ruptura puntual, una intensificación dentro de una tendencia o una reversión después de varios años de alejamiento del dominio.
+
+![Series temporales de las tres cuencas con mayor `P_score`. La línea vertical roja indica el año crítico de jerk.](images/trabajo_terreno/MRCT_Cuencas_Prioritarias_Jerk_21_0.png){#fig-series-top3-jerk fig-align="center" width="100%"}
+
+Esta lectura debe repetirse para cualquier cuenca que pase a planificación de terreno. Una cuenca no debería visitarse solo porque aparece en el top 10; debería visitarse porque su serie temporal formula una pregunta territorial clara.
+
+## Terminales estratégicos de hidrógeno verde {#sec-terminales-h2-jerk}
+
+La nueva versión del notebook agrega una lectura específica para terminales marítimos asociados al potencial traslado o exportación de hidrógeno verde y derivados. La lógica es preventiva: las cuencas cercanas a infraestructura estratégica que ya muestran jerk elevado constituyen zonas donde conviene levantar una línea base territorial más cuidadosa.
+
+| Terminal | Latitud | Longitud | Rol preliminar |
+|---|---:|---:|---|
+| Muelle Laredo | -52,9558 | -70,8202 | Puerto mixto al norte de Punta Arenas; candidato a exportación de hidrógeno o amoníaco. |
+| Terminal Cabo Negro | -52,9394 | -70,8105 | Terminal de combustibles y plataforma potencial para transformación energética. |
+| Terminal Marítimo San Gregorio | -52,6232 | -70,2007 | Terminal en el Estrecho de Magallanes, próximo a zonas de menor intervención antrópica relativa. |
+
+: Terminales estratégicos incorporados al análisis de hidrógeno verde. {#tbl-terminales-h2}
+
+Para cada terminal se construyó un buffer de **50 km**. Dentro de ese radio se seleccionaron cuencas con jerk igual o superior al **p85 anual** y se ordenaron por `P_score`. Las cuencas compartidas entre terminales se mantienen explícitas, porque Laredo y Cabo Negro están espacialmente próximos y pueden capturar señales similares.
+
+| Terminal | Cuencas en buffer | Cuencas con jerk >= p85 | RID superior | Jerk del RID superior | `RES` | Clase |
+|---|---:|---:|---:|---:|---:|---|
+| Muelle Laredo | 597 | 20 | 1808 | 4,0692 | 0,00208 | Intensificación fuerte |
+| Terminal Cabo Negro | 607 | 20 | 1808 | 4,0692 | 0,00208 | Intensificación fuerte |
+| Terminal Marítimo San Gregorio | 693 | 11 | 5258 | -2,3849 | 0,00075 | Reversión fuerte |
+
+: Resumen de cuencas calificadas por terminal estratégico. {#tbl-resumen-terminales-h2}
+
+| Terminal | Ranking | RID | Comuna | Año crítico | Jerk | Tipo | Distancia al terminal (km) | `P_score` |
+|---|---:|---:|---|---:|---:|---|---:|---:|
+| Muelle Laredo | 1 | 1808 | Punta Arenas | 2016 | 4,0692 | Intensificación | 30,4 | 0,7032 |
+| Muelle Laredo | 2 | 2213 | Punta Arenas | 2023 | 3,6748 | Intensificación | 21,4 | 0,6766 |
+| Muelle Laredo | 3 | 9116 | Porvenir | 2019 | 3,6215 | Intensificación | 33,1 | 0,6739 |
+| Terminal Cabo Negro | 1 | 1808 | Punta Arenas | 2016 | 4,0692 | Intensificación | 32,2 | 0,7032 |
+| Terminal Cabo Negro | 2 | 2213 | Punta Arenas | 2023 | 3,6748 | Intensificación | 20,1 | 0,6766 |
+| Terminal Cabo Negro | 3 | 9116 | Porvenir | 2019 | 3,6215 | Intensificación | 33,3 | 0,6739 |
+| Terminal Marítimo San Gregorio | 1 | 5258 | San Gregorio | 2016 | -2,3849 | Reversión | 33,5 | 0,5343 |
+| Terminal Marítimo San Gregorio | 2 | 9061 | Porvenir | 2024 | -2,7341 | Reversión | 45,3 | 0,5010 |
+| Terminal Marítimo San Gregorio | 3 | 5247 | San Gregorio | 2021 | -3,1516 | Reversión | 15,4 | 0,3651 |
+
+: Primeras cuencas calificadas por terminal de hidrógeno verde. {#tbl-top-terminales-h2}
+
+![Cuencas con jerk elevado en buffers de 50 km alrededor de terminales estratégicos de hidrógeno verde.](images/trabajo_terreno/MRCT_Cuencas_Prioritarias_Jerk_25_0.png){#fig-terminales-h2-jerk fig-align="center" width="100%"}
+
+## Uso en planificación de terreno {#sec-uso-terreno-jerk}
+
+La selección por jerk debe alimentar una reunión técnica y territorial antes de definir rutas. En esa revisión se recomienda trabajar con cuatro listas:
+
+- **lista prioritaria**, con las diez cuencas del ranking del buffer de Punta Arenas;
+- **lista logística**, con cuencas cercanas o visitables dentro del mismo recorrido;
+- **lista estratégica H2**, con cuencas próximas a Muelle Laredo, Cabo Negro y San Gregorio;
+- **lista de reemplazo**, con cuencas alternativas por si falla el acceso, el clima o el permiso.
+
+La reunión debe revisar caminos, huellas, portones, predios, restricciones de propiedad, áreas protegidas, infraestructura, posibilidad de vuelo de dron, puntos seguros de medición, pertinencia territorial y antecedentes locales de incendios, inundaciones, sequías, obras, ganadería, extracción, cortes de camino o nieve persistente.
+
+El producto esperado no es reemplazar el ranking, sino convertirlo en un plan de campaña realista: qué cuencas se visitan, cuáles quedan como respaldo, qué hipótesis se validan y qué observaciones se necesitan en cada sitio.
+
+## Fichas de terreno derivadas {#sec-fichas-jerk}
+
+Cada cuenca que avance a terreno debe tener una ficha técnica. La base generada permite poblar automáticamente buena parte de esa ficha.
+
+| Bloque de ficha | Campos sugeridos |
+|---|---|
+| Identificación | `RID`, comuna, prioridad, año crítico, tipo de evento. |
+| Señal MRCT | `Jerk`, percentil anual, `RES`, `RES_STATE`, `RES_TYPE`, `Domain`, `Velocidad`, `Aceleracion`, `SENS`, `Domain_local`. |
+| Ubicación | centroide, distancia a Punta Arenas, anillo, mapa de detalle, ruta preliminar. |
+| Contexto H2 | terminal cercano, distancia al terminal, pertenencia a buffer de 50 km, ranking por terminal. |
+| Pregunta de terreno | Qué condición debería observarse según la señal: intensificación, reversión, baja resiliencia o contraste local. |
+| Observaciones requeridas | fotografías, dron, temperatura, humedad, agua visible, nieve, cobertura, perturbación, accesibilidad. |
+| Estado de validación | consistente, parcialmente consistente, no consistente o no evaluable. |
+
+: Contenido sugerido para fichas de terreno derivadas del ranking de jerk. {#tbl-ficha-jerk}
+
+Estas fichas son el puente entre análisis y campaña. Evitan que el equipo de terreno reciba solo coordenadas y permiten que cada visita tenga una pregunta de validación explícita.
+
+## Productos exportados {#sec-productos-jerk}
+
+La nueva versión del flujo exporta productos tabulares, espaciales y consultables:
+
+| Producto | Formato | Contenido |
+|---|---|---|
+| `cuencas_prioritarias_jerk_10.xlsx` | Excel | Hojas `Buffer_top10`, `Terminales_H2` y `Eventos_reg_p95`. |
+| `cuencas_prioritarias_top10.shp` | Shapefile | Geometría de las diez cuencas prioritarias. |
+| `cuencas_terminales_h2.shp` | Shapefile | Geometría de cuencas calificadas por terminal. |
+| `mrct_jerk_analysis.db` | DuckDB | Tablas analíticas para consulta posterior. |
+
+: Productos exportados por el notebook actualizado. {#tbl-productos-jerk}
+
+## Limitaciones {#sec-limitaciones-jerk}
+
+El análisis tiene limitaciones que deben mantenerse visibles:
+
+- el jerk detecta discontinuidades, no causas;
+- un evento extremo puede deberse a cambio ecológico real, ruido, nube, nieve, mosaico débil, cambio de cobertura temporal o efecto metodológico;
+- la distancia a Punta Arenas y a terminales se calculó como aproximación euclidiana, no como tiempo real de viaje;
+- pertenecer a la comuna de Punta Arenas no implica cercanía al centro urbano;
+- el análisis de terminales es una lectura espacial preliminar y no reemplaza evaluación ambiental, modelación hidrológica ni línea base de proyecto;
+- la selección no incorpora todavía permisos, propiedad, estado de caminos, conocimiento local ni seguridad de vuelo;
+- las coberturas anuales de jerk son incompletas, por lo que los percentiles deben interpretarse como señales de priorización y no como diagnóstico definitivo.
+
+Estas limitaciones no invalidan el análisis. Definen su uso correcto: una herramienta para orientar dónde mirar primero, qué preguntas llevar a terreno y dónde conviene anticipar una línea base más fina.
+
+## Cierre operativo {#sec-cierre-jerk}
+
+La selección actualizada convierte el panel MRCT en una agenda preliminar de validación territorial. El procesamiento identificó eventos abruptos, construyó una base consultable, priorizó diez cuencas del entorno operacional de Punta Arenas y agregó una lectura estratégica para terminales vinculados al hidrógeno verde.
+
+El siguiente paso no es salir directamente a esas diez cuencas ni asumir impacto por proximidad a infraestructura. El paso correcto es someter la lista a revisión aplicada: accesibilidad real, conversación con actores locales, evaluación de rutas, permisos, clima, seguridad, pertinencia territorial y contraste con antecedentes de proyectos energéticos. Con esa revisión, el ranking puede transformarse en un plan de terreno con sitios principales, sitios alternativos y preguntas de validación claras.

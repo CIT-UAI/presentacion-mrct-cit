@@ -1,0 +1,41 @@
+---
+title: "Trabajo en Terreno"
+subtitle: "Validación territorial de cuencas prioritarias"
+---
+
+Esta sección organiza el paso desde la lectura analítica de la MRCT hacia una campaña de observación y validación en territorio. Su función es conectar las señales detectadas en gabinete con decisiones operativas: qué cuencas revisar, cómo planificar la campaña, qué registrar en terreno y cómo devolver esa evidencia al sistema MRCT.
+
+El trabajo de terreno no busca confirmar mecánicamente los resultados del modelo. Su aporte es contrastar la señal satelital con evidencia directa: registros fotográficos, vuelos de dron, mediciones ambientales, observación de cobertura, presencia de agua o nieve, humedad superficial, accesibilidad, perturbaciones visibles y condiciones locales que no siempre quedan representadas en los indicadores remotos.
+
+::: {.callout-note}
+## Rol de esta sección
+
+El trabajo en terreno se plantea como un ciclo completo: selección preliminar de cuencas, planificación de campaña, levantamiento estandarizado, fichas por sitio, resultados de terreno e integración posterior con la MRCT.
+:::
+
+## Estructura de la sección {#sec-estructura-trabajo-terreno}
+
+La sección se ordena en seis capítulos complementarios.
+
+| Capítulo | Función |
+|---|---|
+| [Selección de Cuencas Prioritarias](jerk.qmd) | Presenta la primera aproximación técnica para identificar cuencas candidatas mediante análisis de jerk. |
+| [Planificación de Campaña](planificacion_terreno.qmd) | Define cómo convertir la preselección en una campaña factible: rutas, permisos, equipo, seguridad y coordinación local. |
+| [Protocolo de Levantamiento](protocolo_levantamiento.qmd) | Establece qué registrar en terreno y cómo asegurar datos comparables entre cuencas. |
+| [Fichas de Cuencas Seleccionadas](fichas_cuencas.qmd) | Deja la estructura de fichas por cuenca para completar cuando se definan los sitios finales. |
+| [Resultados del Levantamiento](resultados_terreno.qmd) | Reserva el espacio para documentar cuencas visitadas, mediciones, fotografías, vuelos y hallazgos. |
+| [Integración y Validación MRCT](integracion_validacion.qmd) | Define cómo comparar la evidencia de terreno con la señal MRCT y registrar consistencias, diferencias y aprendizajes. |
+
+: Organización propuesta de la sección Trabajo en Terreno. {#tbl-estructura-trabajo-terreno}
+
+## Flujo operativo {#sec-flujo-trabajo-terreno}
+
+El flujo completo tiene tres momentos. Primero, el **pre-terreno**, donde se seleccionan cuencas candidatas, se revisa su factibilidad y se prepara la campaña. Segundo, el **terreno**, donde se levantan observaciones, fotografías, vuelos y mediciones bajo un protocolo común. Tercero, el **post-terreno**, donde se ordenan los datos, se evalúa su calidad y se integran con la MRCT.
+
+Esta organización permite que la sección pueda completarse progresivamente. Algunos capítulos pueden quedar planteados antes de salir a terreno; otros deberán actualizarse cuando se definan las cuencas finales o cuando la campaña haya sido ejecutada.
+
+## Criterio de lectura {#sec-criterio-lectura-terreno}
+
+La validación territorial debe leerse como una conversación entre modelo y territorio. Una coincidencia entre MRCT y terreno fortalece la interpretación; una diferencia no invalida automáticamente el modelo, sino que abre una pregunta sobre escala, fecha, calidad de insumos, accesibilidad, heterogeneidad interna o procesos locales no capturados.
+
+Por eso la sección prioriza trazabilidad: cada observación debe poder conectarse con una cuenca, una fecha, una coordenada, una métrica MRCT y una pregunta de validación.

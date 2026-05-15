@@ -1,0 +1,1064 @@
+---
+title: "Inteligencia Artificial en Mercado Público"
+subtitle: "Búsqueda y Priorización Personalizada de Ofertas Públicas de Estado de Chile"
+# institute: "Centro de Inteligencia Territorial - UAI"
+author: "Denis Berroeta G."
+date: "11-12-2025"
+bibliography: bibliography.bib
+resources:
+    - images/**
+format:
+  revealjs:
+    footer: "_Sistema basado en Agentes para Plataforma de Mercado Público_"
+    preview-links: true
+    css: style/style_long.css
+    transition: slide
+    progress: true
+    hash: true
+    center: true
+    chalkboard: true
+    theme: default
+    width: 1920
+    height: 1080
+---
+
+# Idea General
+
+## 
+
+### Idea General
+
+:::::: columns
+::: {.column .p_small width="45%"}
+[Problema:]{.gris}
+
+-   La plataforma **Mercado Público** genera un volumen alto y heterogéneo de licitaciones.
+-   Proveedores (CIT) invierten muchas horas en búsqueda, lectura y descarte.
+
+[Propuesta:]{.gris}
+
+-   Crear un sistema basado en agentes LLM que [buscan, priorizan y alertan]{.fuxia} según las necesidades del Centro de Inteligencia Territorial.
+
+[Resultados:]{.gris}
+
+-   Menos tiempo de búsqueda, más oportunidades relevantes y mejor tasa de postulación.
+:::
+
+::: {.column .p_small_m width="5%"}
+:::
+
+::: {.column width="50%"}
+<br> <br>
+
+<center>![](images/1-licitacion.png){fig-align="center" width="400"}</center>
+
+<center>![](images/mercado-publico.png){fig-align="center" width="300"}</center>
+:::
+::::::
+
+# Etapas
+
+## 
+
+### Etapas Generales
+
+:::::: columns
+::: {.column .p_small width="40%"}
+1.  Criterios estratégicos
+2.  Información API
+3.  Infraestructura de BBDD
+4.  Agentes extracción
+5.  Agentes priorización
+6.  Agentes Comunicación y Alerta
+7.  Validación con casos reales y ajuste de criterios.
+8.  Despliegue y capacitación del equipo.
+:::
+
+::: {.column .p_small_m width="10%"}
+:::
+
+::: {.column width="50%"}
+<center>![](images/mercado-publico.png){fig-align="center" width="300"} ![](images/estado-mp.png){fig-align="center"}</center>
+:::
+::::::
+
+# Criterios Estratégicos
+
+## 
+
+<center>![](images/esquema_mp.png){fig-align="center"}</center>
+
+##
+
+### Búsqueda, Priorización y Alerta
+
+:::::: columns
+::: {.column .p_small width="40%"}
+[Objetivo:]{.gris}
+
+-   Definir todo lo que hace el CIT al buscar y evaluar un oferta pública.
+
+[Contenido:]{.gris}
+
+-   Perfil de oferta (rubros, capacidades, territorios)
+-   Filtros duros (exclusiones tajantes)
+-   Vocabulario/taxonomía (positivos/negativos)
+-   Reglas de priorización y umbrales de alerta
+-   Formas de Comunicación
+:::
+
+::: {.column .p_small_m width="10%"}
+:::
+
+::: {.column width="50%"}
+
+<br>
+
+<center>![](images/esquema_mp.png){fig-align="center"}</center>
+:::
+::::::
+
+## 
+
+### Búsqueda
+
+:::::: columns
+::: {.column .p_small width="50%"}
+[Objetivo:]{.gris}
+
+-   Recortar el universo desde el origen.
+
+[Contenido:]{.gris}
+
+-   Estados aceptados (p.ej., Publicada/Abierta) y ventanas de fecha
+-   Territorios: regiones/comunas prioritarias y excluidas
+-   Montos: mínimo/máximo por licitación
+-   Modalidades preferidas/excluidas
+-   Requisitos habilitantes excluyentes (checklist mínimo)
+
+> *“Son reglas binarizadas de ‘pasa/no pasa’ para no perder tiempo.”*
+:::
+
+::: {.column .p_small_m width="5%"}
+:::
+
+::: {.column width="45%"}
+<center>![](images/busqueda-mp.png){fig-align="center" width="500"}</center>
+:::
+::::::
+
+## 
+
+### Priorización
+
+:::::: columns
+::: {.column .p_small width="50%"}
+[Objetivo:]{.gris}
+
+-   Ordenar lo que pasa el filtro y generar ranking justificado
+
+[Contenido:]{.gris}
+
+-   **Similitud** **semántica** (texto de licitación/ítems ↔ oferta del CIT)
+-   **Coincidencia** **de** **taxonomía**/**ítems** (códigos/categorías)
+-   **Elegibilidad** y complejidad/esfuerzo (plazos, anexos, visitas)
+-   **Afinidad** con comprador (histórico y patrones)
+-   **Score** **Bid-Fit** **con explicación**: “Top 3 razones” + “2 riesgos”
+
+> *“No solo rankeamos: explicamos por qué vale la pena.”*
+:::
+
+::: {.column .p_small_m width="5%"}
+:::
+
+::: {.column width="45%"}
+<center>![](images/priorizacion-mp.png){fig-align="center" width="500"}</center>
+:::
+::::::
+
+## 
+
+### Alerta Inteligentes
+
+:::::: columns
+::: {.column .p_small width="50%"}
+[Objetivo:]{.gris}
+
+-   Aavisar bien y a tiempo.
+
+[Contenido:]{.gris}
+
+-   **Canales**: Email / WhatsApp / Teams
+-   **Formato**: Reporte Completo / Resumen Ejecutivo / Aplicación Web
+-   **Frecuencia**: inmediata / diaria / semanal (+ ventana “no molestar”)
+-   **Umbral** de score mínimo para notificar
+-   **Digest semanal** con Top-5 y cambios de estado
+
+> *“Buscamos oportunidad sin fatiga de notificaciones.”*
+:::
+
+::: {.column .p_small_m width="5%"}
+:::
+
+::: {.column width="45%"}
+<center>![](images/alerta-mp){fig-align="center" width="300"}</center>
+:::
+::::::
+
+# Información Disponible
+
+##
+<center>![](images/ddbb-original.png){fig-align="center" }</center>
+<!-- width="1800" -->
+
+
+##
+<center>![](images/vars_filtro.png){fig-align="center" }</center>
+<!-- width="1800" -->
+
+##
+<center>![](images/vars_semanticas){fig-align="center" }</center>
+<!-- width="1800" -->
+
+##
+<center>![](images/vars_espaciales.png){fig-align="center" }</center>
+
+<!-- width="1800" -->
+
+<!-- # Infraestructura de BBDD -->
+
+<!-- ## -->
+
+<!-- <center>![](images/ddbb-propuesta.png){fig-align="center" width="1800"}</center> -->
+
+
+
+# Agente de Filtro y Evaluación
+
+##
+
+### Agente de Filtro y Evaluación
+
+:::::: columns
+::: {.column .p_small width="40%"}
+[Objetivo:]{.gris}
+
+-   Reducir el espacio de Búsqueda de Ofertas Públicas 
+
+[Etapas:]{.gris}
+
+1. Configuración semántica del CIT
+2. Ingesta desde Mercado Público (API)
+3. Normalización de títulos y Compilación de patrones
+4. Puerta 1: Filtro léxico
+5. Puerta 2: Clasificación LLM (Ollama)
+6. Puerta 3: Umbral y decisión final
+
+
+:::
+
+::: {.column .p_small_m width="2%"}
+:::
+
+::: {.column width="58%"}
+<center>![](images/busqueda_01.png){fig-align="center" width="1000"}</center>
+:::
+::::::
+
+##
+
+### Puerta 1: Filtro Léxico
+
+:::::: columns
+::: {.column .p_small width="40%"}
+[Objetivo:]{.gris}
+
+-   Filtro por Patrón [Nombre]{.highlight} de Oferta.   
+Ej. _"LP CONSULTORIA ESTRATEGIA ENERGETICA LOCAL"_ 
+
+[Configuración semántica del CIT:]{.gris}
+
+- Servicios
+- Dominios
+  * Dominios Fuertes
+  * Dominios Suaves
+- Exclusiones
+  - Exclusiones Fuertes
+  - Exclusiones Suaves
+
+
+
+:::
+
+::: {.column .p_small_m width="2%"}
+:::
+
+::: {.column width="58%"}
+<center>![](images/filtro_lexico.png){fig-align="center" width="500"}</center>
+
+```{r eval = FALSE, echo=T}
+CIT_CFG <- list(
+  must_service = c(
+    "consultor", "estudio", "diagn[oó]stic", "an[aá]lis", "evaluaci[oó]n",
+    "dise[nñ]o", "plan( |ificaci[oó]n)", "asesor", "capacitaci[oó]n", "curso", "taller",
+    "plataforma", "sistema", "software", "aplicaci[oó]n", "modelo", "metodolog",
+    "levantamient", "georreferenci", "catastro", "actualizaci[oó]n",
+    "formulaci[oó]n", "elaboraci[oó]n", "implementaci[oó]n",
+    "caracterizaci[oó]n", "sistematizaci[oó]n", "monitoreo", "seguimiento",
+    "prototip", "geocodific", "l[ií]nea base", "desarrollo"
+  ),
+  should_domain = c(
+    "territorial", "urbano", "sig\\b|gis\\b", "georrefer", "map", "cartograf",
+    "indicador", "datos", "\\bbi\\b|dashboard|etl",
+    "inteligencia artificial|machine learning|ml\\b",
+    "pol[ií]ticas p[úu]blicas", "seguridad|delito|delincu",
+    "medioambient|ambiental|cambio clim",
+    "demogr", "socio(econ|dem)", "social|sociales", "fortalecimiento",  # <— agregado
+    "telecom|tic|inform[aá]tic", "accesibilidad", "movilidad"
+  ),
+  strong_domain = c(
+    "sig\\b|gis\\b", "georrefer", "cartograf", "catastro", "geocodific",
+    "indicador", "pol[ií]ticas p[úu]blicas", "urbano|territorial",
+    "seguridad|delito", "medioambient|cambio clim"
+  ),
+  exclusion_hard = c(
+    "medic|cl[ií]nic|hospital|odontolog|oftalmolog|anestesi|laboratori|enfermer|farmac|farmacia|insumos",
+    "equipo(s)? m[eé]dic|instrumental|reactivo|kit|implante|suministro(s)?",
+    "mantenimiento|mantenciones|reparaci[oó]n|correctiva|preventiva|servicio t[eé]cnico",
+    "aseo|limpieza|desinfecci[oó]n|esterilizaci[oó]n","call center",
+    "guardias|seguridad privada|vigilancia( f[ií]sica)?",
+    "veh[ií]culo|camioneta|combustible|neum[aá]tico|repuesto",
+    "imprenta|impresi[oó]n|vestuario|uniforme|alimento|p[aá]n|c[áa]tering",
+    "obra|construcci[oó]n|pavimentaci[oó]n|iluminaci[oó]n|pintura|mobiliario",
+    "compr(a|e)|adquisici[oó]n|suministro(s)?\\b|arriendo\\b|arrendamiento\\b"
+  ),
+  exclusion_soft = c(
+    "bodega|almacen|log[ií]stic", "transporte", "ciberseguridad",
+    "publicidad|difusi[oó]n|dise[nñ]o gr[aá]fico"
+  )
+)
+
+```
+
+:::
+::::::
+
+
+##
+
+### Puerta 2: Clasificación LLM
+
+:::::: columns
+::: {.column .p_small width="40%"}
+[Objetivo:]{.gris}
+
+-   Evaluación General de la Oferta por [Nombre]{.highlight} ante interés del CIT, basándose en los niveles de evaluación semántica.
+
+
+
+[Prompt del Agente LLM]{.gris}
+
+- Perfiles: Estricto y Balanceado
+
+- Prompt basado en configuración semántica del CIT (Servicios, Dominios Exclusiones)
+
+- Modelo LLM  llamado  [`llama3.1:latest`](https://ollama.com/library/llama3.1:latest) (ajustable) montado en en un servidor local [Ollama](https://ollama.com/).
+
+<center>![](images/ollama_logo.png){fig-align="center" width="60"}</center>
+
+
+:::
+
+::: {.column .p_small_m width="5%"}
+:::
+
+::: {.column width="55%"}
+<center>![](images/clasificacion_llm.png){fig-align="center" width="600"}</center>
+
+```{r echo=TRUE, eval=FALSE}
+build_system_prompt_cit <- function(cfg = CIT_CFG, tone = c("strict","balanced")) {
+  tone <- match.arg(tone)
+  
+  fmt_block <- function(x, bullet = "• ") {
+    x <- unname(unlist(x))
+    if (length(x) == 0) return("  (vacío)")
+    paste0(bullet, x, collapse = "\n")
+  }
+  
+  rules_strict <- "
+REGLAS (UMBRAL ESTRICTO):
+1) Marca CANDIDATO SOLO SI:
+   a) hay ≥1 TRIGGER de SERVICIO/CONSULTORÍA (MUST), y
+   b) hay ≥1 TRIGGER de DOMINIO CIT (SHOULD/STRONG), y
+   c) NO hay EXCLUSIÓN DURA.
+2) Si hay exclusión dura → DESCARTAR.
+3) Si falta (a) o (b) → DESCARTAR.
+4) No aceptes SUMINISTROS/COMPRAS/ARRENDOS/MANTENCIÓN ni servicios médicos.
+5) 'signals' deben ser SUBCADENAS LITERALES del título.
+"
+  
+  rules_balanced <- "
+REGLAS (MODO BALANCED, AÚN CONSERVADOR):
+Pasa SOLO si (sin exclusión dura) se cumple alguno:
+- MUST + SHOULD
+- MUST + ≥1 STRONG
+- sin MUST y ≥2 STRONG
+- sin MUST y ≥2 SHOULD
+En caso de duda → DESCARTAR. 'signals' deben ser SUBCADENAS LITERALES.
+"
+  
+  rules <- if (tone == "strict") rules_strict else rules_balanced
+  
+  glue::glue(
+    'Eres un CLASIFICADOR CONSERVADOR de ofertas para el Centro de Inteligencia Territorial (CIT).
+Decide si un TÍTULO de licitación es candidato para servicios de CONSULTORÍA y/o ANÁLISIS del CIT.
+Trabaja SOLO con el título. En caso de duda: DESCARTAR.
+
+CATEGORÍAS prioritarias del CIT:
+- Ingeniería, Ciencias Sociales, Análisis Territorial, SIG/GIS
+- Gestión/Políticas Públicas, Consultorías profesionales
+- Educación/Capacitación
+- Medioambiente (estudios/indicadores/monitoreo/cambio climático)
+- Seguridad/Orden público
+- Consultoría (NO suministro/venta de bienes)
+
+TRIGGERS de SERVICIO/CONSULTORÍA (MUST)
+{fmt_block(cfg$must_service)}
+
+TRIGGERS de DOMINIO CIT (SHOULD)
+{fmt_block(cfg$should_domain)}
+
+DOMINIOS FUERTES (STRONG)
+{fmt_block(cfg$strong_domain)}
+
+EXCLUSIONES DURAS
+{fmt_block(cfg$exclusion_hard)}
+
+EXCLUSIONES BLANDAS
+{fmt_block(cfg$exclusion_soft)}
+{rules}
+
+FORMATO DE SALIDA (JSON ESTRICTO):
+{{
+  "decision": "candidato" | "descartar",
+  "score": 0-100,
+  "signals": ["<subcadena_1>", "<subcadena_2>", "..."],
+  "rationale": "<<= 20 palabras>"
+}}
+
+PUNTAJE (si CANDIDATO): 70 base por cumplir la regla, +10 por cada trigger extra de dominio,
+-40 por indicios leves de suministro/obra (exclusión blanda). Si no cumple: "descartar" (score ≤ 30).'
+  )
+}
+
+```
+
+:::
+::::::
+
+
+
+##
+
+### Puerta 3: Umbral de Selección
+
+:::::: columns
+::: {.column .p_small width="40%"}
+[Objetivo:]{.gris}
+
+-   Utilizar umbral cuantitativo para descartar ofertas que no son de interés para el CIT
+
+[Umbral Elegido]{.gris}: `75%`. Bajo este umbral se descartan las ofertas.
+
+
+:::
+
+::: {.column .p_small_m width="2%"}
+:::
+
+::: {.column width="58%"}
+<center>![](images/ubral.png){fig-align="center" width="900"}</center>
+
+
+:::
+::::::
+
+
+
+# Enriquecer Data
+
+##
+
+### [Enriquecer Data]{.gris}
+
+:::::: columns
+::: {.column .p_small width="25%"}
+[Objetivo:]{.gris}
+
+-   Extraer data de la oferta pública, seleccionar y consolidar solo la información relevante para la próxima de priorización. 
+
+[Etapas:]{.gris}
+
+1. Consulta API por `CodigoExterno`
+2. Selección información relevante
+3. Generar DDBB Refinada
+
+
+
+:::
+
+::: {.column .p_small_m width="2%"}
+:::
+
+::: {.column width="73%"}
+<center>![](images/refined.png){fig-align="center" width="1000"}</center>
+:::
+::::::
+
+# Agente de Priorización
+
+##
+
+### Agente de Priorización
+
+<br>
+
+:::::: columns
+::: {.column .p_small width="50%"}
+[Objetivo:]{.gris}
+
+-   Con la información completa de cada oferta candidata se procede a evaluar según criterios para para clasificar y priorizar la oferta. 
+
+[Etapas:]{.gris}
+
+1. Definir Prompts de `system` y `user` (por cada oferta)
+2. Clasificación del LLM por Criterio  (en evaluación)
+3. Ponderar (`w`) por Criterio
+
+<center>![](images/ollama_logo.png){fig-align="center" width="60"}</center>
+
+:::
+
+::: {.column .p_small_m width="2%"}
+:::
+
+::: {.column width="48%"}
+<center>![](images/priorizacion-mp.png){fig-align="center" width="500"}</center>
+:::
+::::::
+
+
+##
+
+### [Prompts]{.gris}
+
+
+:::::: columns
+::: {.column .p_small width="40%"}
+[Objetivo:]{.gris}
+
+-   Se busca que el modelo LLM tengan definido su rol y la información de contexto específica para cada uno de las ofertas candidatas. 
+
+
+[Prompt para Calificar las Ofertas]{.gris}
+
+- Prompt `System`: Rol General del LLM
+- Prompt `User`: Tarea que se le pide al LLM de acuerdo a la información de cada oferta.
+
+
+:::
+
+::: {.column .p_small_m width="5%"}
+:::
+
+::: {.column width="55%"}
+
+```{r echo=TRUE, eval=FALSE}
+#' Build the system prompt for the Qualification Agent
+#' @return String
+build_system_prompt_qualifier <- function() {
+  glue::glue(
+    'Eres un AGENTE CALIFICADOR experto para el Centro de Inteligencia Territorial (CIT).
+    Tu tarea es analizar en detalle una licitación pública y evaluarla según criterios específicos.
+    
+    CRITERIOS DE EVALUACIÓN:
+    1. BENEFICIO / ESFUERZO:
+       - Beneficio: Potencial impacto, relevancia estratégica, presupuesto (si disponible).
+       - Esfuerzo: Complejidad técnica, plazos, requisitos administrativos.
+       - Clasificación: "Alto", "Medio", "Bajo".
+    
+    2. INTEGRACIÓN UAI (Universidad Adolfo Ibáñez):
+       - ¿Existe oportunidad para involucrar alumnos, investigación o pasantías?
+       - ¿Se alinea con temas académicos (Data Science, Urbanismo, Políticas Públicas)?
+       - Clasificación: "Si", "No", "Posible".
+    
+    3. UBICACIÓN / TERRITORIO:
+       - ¿Dónde se ejecuta el proyecto? (Comuna, Región, Nacional).
+    
+    4. PLAZOS:
+       - Evalúa si los plazos de cierre y ejecución son realistas y manejables.
+    
+    5. CATEGORÍA DE ITEMS:
+       - Clasifica los ítems solicitados en categorías macro (ej. Consultoría, Software, Hardware, Capacitación).
+       
+    6. PERFIL DEL COMPRADOR:
+       - Analiza quién compra y su relevancia (implícito en el nombre).
+
+    7. MONTO ESTIMADO / ESCALA ECONÓMICA:
+       - Usa el campo MONTO ESTIMADO (en pesos chilenos cuando sea aplicable).
+       - Evalúa de forma cualitativa si el presupuesto parece bajo, medio o alto
+         para el tipo de servicio descrito.
+       - Esta evaluación económica la usará otro módulo externo, solo debes describirla.
+    
+    FORMATO DE SALIDA (JSON ESTRICTO):
+    {{
+      "benefit_effort": {{
+        "level": "Alto" | "Medio" | "Bajo",
+        "rationale": "<breve justificación>"
+      }},
+      "uai_integration": {{
+        "feasible": "Si" | "No" | "Posible",
+        "rationale": "<breve justificación>"
+      }},
+      "location": "<Lugar de ejecución>",
+      "deadlines_summary": "<Breve opinión sobre plazos>",
+      "items_category": ["<Cat1>", "<Cat2>"],
+      "buyer_profile": "<Breve descripción del comprador>",
+      "economic_band_qualitative": "bajo" | "medio" | "alto" | "no_especificado",
+      "summary": "<Resumen ejecutivo de 2 líneas>"
+    }}
+    
+    INSTRUCCIONES ADICIONALES:
+    - Sé consistente con los criterios: solo marca "Alto" cuando el proyecto sea
+      claramente muy relevante y con buena relación beneficio/esfuerzo.
+    - Si falta información, infiere con cautela o marca como "no_especificado".
+    - Responde SIEMPRE en JSON válido, sin texto adicional fuera del JSON.
+    '
+  )
+}
+
+
+#' Build user prompt with full tender details
+#' @param tender_data List or one-row dataframe with tender details
+#' @return String
+build_user_prompt_qualifier <- function(tender_data) {
+  
+  items_str <- if (!is.null(tender_data$Items)) {
+    tryCatch({
+      paste(tender_data$Items$NombreProducto, collapse = "; ")
+    }, error = function(e) "Detalle de items no procesable")
+  } else {
+    "Sin detalle de items"
+  }
+  
+  glue::glue(
+    'ANALIZA ESTA LICITACIÓN:
+    
+    TITULO: {tender_data$Nombre}
+    CODIGO: {tender_data$CodigoExterno}
+    COMPRADOR: {tender_data$Comprador$NombreOrganismo} ({tender_data$Comprador$RutUnidad})
+    DESCRIPCION: {tender_data$Descripcion}
+    
+    FECHAS:
+    - Publicación: {tender_data$Fechas$FechaPublicacion}
+    - Cierre: {tender_data$Fechas$FechaCierre}
+    
+    UBICACION: {tender_data$Comprador$ComunaUnidad}, {tender_data$Comprador$RegionUnidad}
+    
+    MONTO ESTIMADO (VALOR CLAVE PARA LA EVALUACIÓN ECONÓMICA):
+    - MontoEstimado: {tender_data$MontoEstimado}
+    - Moneda: {tender_data$Moneda}
+    
+    ITEMS:
+    {items_str}
+    '
+  )
+}
+
+
+```
+
+:::
+::::::
+
+
+
+##
+
+### Clasificación del LLM por Criterio
+
+
+:::::: columns
+::: {.column .p_small width="40%"}
+[Objetivo:]{.gris}
+
+-   Corresponde la proceso donde el modelo califica a cada una de las ofertas de acuerdo a a los criterios definidos considerando la información completa. 
+
+
+[Resultados]{.gris}
+
+- EL Modelo entrega un resumen en [lenguaje natural]{.fuxia} por cada criterio
+- EL Modelo entrega un evaluación en [nivel categórico]{.fuxia} (ajustable) por cada criterio
+
+
+:::
+
+::: {.column .p_small_m width="5%"}
+:::
+
+::: {.column width="55%"}
+```{r eval = F, echo = T}
+====================
+Columna: CodigoExterno 
+====================
+[1] "1049-124-LE25"
+
+====================
+Columna: Nombre 
+====================
+[1] "SERVICIO DE LEVANTAMIENTO DE DATOS SOCIOECONÓMICOS"
+
+====================
+Columna: score_qualification 
+====================
+[1] 92
+
+====================
+Columna: benefit_level 
+====================
+[1] "Alto"
+
+====================
+Columna: benefit_rationale 
+====================
+[1] "El proyecto tiene un impacto potencial significativo en la industria pesquera y acuícola nacional, ya que busca mejorar el monitoreo económico de la misma. El presupuesto asignado es alto (25 millones CLP). Sin embargo, el esfuerzo requerido para levantar datos socioeconómicos en plantas manufactureras y empresas salmoneras puede ser complejo y requerir un gran tiempo."
+
+====================
+Columna: uai_feasible 
+====================
+[1] "Si"
+
+====================
+Columna: uai_rationale 
+====================
+[1] "La Universidad Adolfo Ibáñez tiene una fuerte presencia en la Región de Valparaíso, lo que facilitaría la integración de alumnos, investigación o pasantías en el proyecto. Además, los temas académicos relacionados con Data Science y Políticas Públicas se alinean con las necesidades del proyecto."
+
+====================
+Columna: location 
+====================
+[1] "Valparaíso, Región de Valparaíso"
+
+====================
+Columna: deadlines_summary 
+====================
+[1] "Los plazos establecidos para la publicación y cierre de la licitación son realistas y manejables."
+
+====================
+Columna: items_category 
+====================
+[1] "Consultoría, Capacitación"
+
+====================
+Columna: buyer_profile 
+====================
+[1] "El Instituto de Fomento Pesquero es una institución pública que se enfoca en el desarrollo de la industria pesquera y acuícola nacional. Su historial sugiere un compromiso con la mejora continua y la innovación."
+
+====================
+Columna: qual_summary 
+====================
+[1] "La licitación busca contratar un servicio especializado para apoyar el levantamiento de datos socioeconómicos en plantas manufactureras y empresas salmoneras en varias regiones del país. El proyecto tiene un impacto potencial significativo y requiere un gran esfuerzo, pero ofrece oportunidades para la integración de alumnos y la alineación con temas académicos."
+
+====================
+Columna: MontoEstimado 
+====================
+[1] 25000000
+
+====================
+Columna: economic_band 
+====================
+[1] "bajo"
+
+====================
+Columna: economic_score 
+====================
+[1] 25
+```
+
+
+:::
+::::::
+
+##
+
+### Ponderación por Criterio
+
+
+:::::: columns
+::: {.column .p_small width="40%"}
+[Objetivo:]{.gris}
+
+-   Primero se transforma cada criterio cualitativo en un puntaje numérico (por ejemplo, Alto ≈ 90, Medio ≈ 60, Bajo ≈ 30 y, en el caso de UAI, Sí ≈ 90, Posible ≈ 60, No ≈ 30). 
+- Luego se calcula un puntaje final CIT como combinación lineal de estos tres componentes, usando ponderaciones fijas.
+- Finalmente, el puntaje se clasifica en tres niveles de prioridad: Alto (≥ 85), Medio (60–84) y Bajo (< 60), lo que permite ordenar y priorizar objetivamente las ofertas.
+
+
+[Ponderaciones por Criterio]{.gris}
+
+- Beneficio/Esfuerzo `w_benefit = 0.4`
+-	Potencial de integración con la UAI `uai_feasible = 0.2`
+-	Escala económica (calculado a partir del monto estimado) `economic_score = 0.4` .
+
+
+:::
+
+::: {.column .p_small_m width="5%"}
+:::
+
+::: {.column width="55%"}
+
+<br>
+
+<div style="font-size: 1rem">
+
+
+|   **CodigoExterno**   |   **Nombre**   |   **benefit_numeric**   |   **uai_numeric**   |   **economic_score**   |   **score_final**   |   **benefit_level_final**   |
+| --- | --- | --- | --- | --- | --- | --- |
+|   1351461-5-LR25   |   Plataforma de Integración y Analítica de Datos.   |   90   |   90   |   48.1   |   73   |   Medio   |
+|   1049-124-LE25   |   SERVICIO DE LEVANTAMIENTO DE DATOS SOCIOECONÓMICOS   |   90   |   90   |   25   |   64   |   Medio   |
+|   3479-97-LE25   |   CONTRATACION ASISTENTE SOCIAL ASESORIA TECNICA PRO   |   90   |   90   |   25   |   64   |   Medio   |
+|   5251-195-LP25   |   Diagnóstico Adm. y Finanzas Ues Estatales   |   90   |   90   |   25.9   |   64   |   Medio   |
+|   1070997-6-CO25   |   Estudio de Diagnóstico y Evaluación constructivo   |   90   |   60   |   25.4   |   58   |   Bajo   |
+|   3065-40-LE25   |   SERVICIO DE AUDITORÍA Y ASESORÍA INFORMÁTICA   |   90   |   60   |   25   |   58   |   Bajo   |
+|   858-180-LP25   |   SEGURIDAD PERIMETRAL Y MONITOREO DEL IND 12 MESES   |   90   |   60   |   25   |   58   |   Bajo   |
+|   893-23-LE25   |   DIAGNOSTICO SOBRE SOLICITUD DE RESERVA DE CAUDAL   |   90   |   60   |   25   |   58   |   Bajo   |
+|   966131-78-LE25   |   Estudio Base de Cartografía Castro   |   90   |   90   |   0   |   54   |   Bajo   |
+|   4044-38-LE25   |   LP CONSULTORIA ESTRATEGIA ENERGETICA LOCAL   |   90   |   60   |   0   |   48   |   Bajo   |
+</div>
+:::
+::::::
+
+
+
+# Sistema de Alertas
+
+##
+
+### Sistema de Alertas (Pendiente)
+
+<br>
+
+:::::: columns
+::: {.column .p_small width="50%"}
+[Objetivo:]{.gris}
+
+-   Implementar un sistema de alertas que comunique de forma oportuna y priorizada las licitaciones relevantes para el CIT.
+
+[Contenidos]{.gris}
+
+- Definir formato de “alerta tipo” (campos mínimos).
+- Enviar alertas automáticas por e-mail.
+- Publicar oportunidades en una plataforma interna.
+- Definir frecuencia de actualización (ej. diaria).
+- Establecer umbrales para activar alertas (score / prioridad).
+
+:::
+
+::: {.column .p_small_m width="2%"}
+:::
+
+::: {.column width="48%"}
+<center>![](images/alerta-mp.png){fig-align="center" width="300"}</center>
+:::
+::::::
+
+
+##
+
+### Sistema de Alertas (Pendiente)
+
+
+:::::: columns
+::: {.column .p_small width="40%"}
+
+
+[Ejemplo:]{.gris}
+
+-	Muestra la información clave de la licitación y los criterios de evaluación.
+- Presenta los resultados del sistema de evaluación con LLM en lenguaje natural y cuantitativamente.
+- Permite aplicar la identidad visual institucional de la UAI y del CIT (colores, logos, tipografías).
+<!-- - Puede agregar metainformación del sistema: nombre del modelo LLM utilizado, versión, fecha de evaluación y regla de ponderación aplicada. -->
+
+<br>
+
+<center>![](images/alerta-mp.png){fig-align="center" width="200"}</center>
+
+
+:::
+
+::: {.column .p_small_m width="5%"}
+:::
+
+::: {.column width="55%" .texto-small}
+
+## [Plataforma de Integración y Analítica de Datos. `Código: 1351461-5-LR25` ]{.gris} 
+
+<!-- ### Resumen ejecutivo -->
+
+El proyecto propone el desarrollo de una plataforma de integración y analítica de datos que puede mejorar significativamente la gestión de información y toma de decisiones. Es altamente estratégico para el CIT por su foco en datos y analítica, con una relación beneficio/esfuerzo favorable y un presupuesto considerablemente atractivo.
+
+<!-- ### Evaluación cuantitativa -->
+
+| Indicador | Valor |
+|-----------|-------|
+| Score final CIT | 73 |
+| Score LLM (score_qualification) | 92 |
+| Nivel de beneficio final | Alto |
+| Score económico | 87.0 |
+| Banda económica | medio |
+| Monto estimado (CLP) | 634.100.000 |
+
+<!-- ### Detalle cualitativo -->
+
+**Beneficio / Esfuerzo** (Nivel: **Alto**)
+
+- Justificación: El proyecto tiene un gran potencial impacto en la gestión de información y toma de decisiones, alineado con las capacidades del CIT en datos y analítica. Si bien el esfuerzo técnico es considerable, es manejable y coherente con el tipo de solución esperada.
+
+**Integración UAI** (Factible: **Si**)
+
+- Justificación: Permite integrar alumnos y académicos en temas de ciencia de datos, ingeniería y analítica avanzada, con posibilidades de proyectos de investigación aplicada, prácticas y desarrollo de casos de estudio.
+
+**Ubicación y plazos**
+
+- Ubicación: No especificado claramente; probablemente alcance nacional o institucional.
+- Plazos: Los plazos parecen razonables para una solución de este tipo, aunque requieren una planificación cuidadosa para fases de diseño, desarrollo, pruebas e implementación.
+
+**Ítems y comprador**
+
+- Categorías de ítems: Consultoría y desarrollo de plataforma de software y servicios asociados.
+- Perfil del comprador: Organismo público con interés en mejorar su infraestructura de datos y capacidades analíticas, lo que lo hace un socio estratégico para el CIT.
+:::
+::::::
+
+
+# Conclusiones
+
+##
+### Conclusión
+
+
+<center>![](images/gemini_system_w2.png){fig-align="center" width="1900"}</center>
+
+##
+
+### Conclusión
+
+
+:::::: columns
+::: {.column .p_small width="55%"}
+
+
+
+- En sólo 12 días de diciembre se han publicado [2.315]{.fuxia}  licitaciones en Mercado Público.
+- Primer agente (Filtro y Evaluación) redujo ese universo masivo a solo [10]{.fuxia} ofertas candidatas de interés para el CIT.
+- Segundo agente (Priorización) analiza en detalle cada candidata y entrega criterios, puntajes y resúmenes para decidir si vale la pena postular.
+- Se reduce drásticamente el tiempo que el personal especializado debe dedicar a buscar y evaluar licitaciones.
+- Sistema flexible y ajustable: Los criterios y ponderaciones se pueden ajustar según las prioridades del CIT.
+- Se utilizó un modelo LLM pequeño con Ollama todo Open Source
+
+
+:::
+
+::: {.column .p_small_m width="5%"}
+:::
+
+::: {.column width="40%"}
+
+<br>
+
+<center>![](images/gemini_system_w2.png){fig-align="center" width="800"}</center>
+
+
+:::
+::::::
+
+
+
+# Trabajos Futuros
+
+##
+
+
+<center>![](images/t_futuros.png){fig-align="center" width="1900"}</center>
+
+##
+
+### Trabajos Futuros
+
+<br>
+
+:::::: columns
+::: {.column .texto-small2 width="55%"}
+
+
+
+### 1. Afinar el modelo de evaluación y priorización
+  - Ajustar criterios y ponderaciones en función de la experiencia de uso y resultados.
+  - Validar la matriz de evaluación con revisores expertos de CIT y otras unidades UAI.
+
+### 2. Profundizar en la capa técnica y de modelos
+
+- Incorporar modelos de lenguaje más avanzados, con mayor capacidad de razonamiento y contexto.
+- Migrar componentes críticos (scraping, filtrado, scoring) a lenguajes más robustos y eficientes como Rust.
+
+
+### 3. Extender el sistema a toda la universidad
+
+- Diseñar un flujo flexible para que otros centros y escuelas definan sus propios criterios y ponderaciones.
+- Permitir múltiples “perfiles de búsqueda” (CIT, Escuela de Negocios, Ingeniería, etc.).
+
+### 4. Aprendizaje a partir del histórico de licitaciones
+- Analizar licitaciones pasadas: cuáles se postularon, cuáles se adjudicaron y cuáles se perdieron.
+- Retroalimentar el modelo de puntuación para mejorar la tasa de acierto y la calidad de las propuestas futuras.
+
+
+:::
+
+::: {.column .p_small_m width="5%"}
+:::
+
+::: {.column width="40%"}
+
+<br>
+<br>
+
+<center>![](images/t_futuros.png){fig-align="center" width="1900"}</center>
+
+:::
+::::::
+
+
+
+<!-- ##  -->
+
+<!-- ### Proyecto de Paper Review -->
+
+<!-- :::::: columns -->
+
+<!-- ::: {.column .p_small width="40%"} -->
+
+<!-- ::: -->
+
+<!-- ::: {.column .p_small_m width="10%"} -->
+
+<!-- ::: -->
+
+<!-- ::: {.column .p_small_m width="50%"} -->
+
+<!-- ::: -->
+
+<!-- :::::: -->
+
+<!-- ##  -->
+
+<!-- ### Referencias {.title_h4} -->
+
