@@ -1,0 +1,140 @@
+.reveal .mrct-lead {
+  color: #525252;
+  font-family: "Roboto", sans-serif;
+  font-size: 2rem;
+  font-weight: 300;
+  line-height: 1.25;
+  text-align: left;
+}
+
+.reveal .mrct-kicker {
+  color: #969696;
+  font-family: "Roboto", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  margin-bottom: .35rem;
+  text-transform: uppercase;
+}
+
+.reveal .mrct-big {
+  color: #969696;
+  display: block;
+  font-family: "Roboto", sans-serif;
+  font-size: 2.1rem;
+  font-weight: 700;
+  line-height: 1.08;
+  margin: .4rem 0 1rem 0;
+  text-align: left;
+}
+
+.reveal .mrct-tight li {
+  margin-bottom: .45rem;
+}
+
+.reveal .mrct-flow {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .65rem;
+  justify-content: center;
+  margin-top: 1.4rem;
+}
+
+.reveal .mrct-step {
+  border: 2px solid #e4e4e4;
+  border-left: 7px solid #C0249B;
+  border-radius: 8px;
+  color: #525252;
+  font-family: "Roboto", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 500;
+  line-height: 1.15;
+  min-height: 72px;
+  padding: .75rem .9rem;
+  width: 215px;
+}
+
+.reveal .mrct-arrow {
+  color: #969696;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.reveal .mrct-cardgrid {
+  display: grid;
+  gap: .8rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 1rem;
+}
+
+.reveal .mrct-card {
+  border: 1px solid #e4e4e4;
+  border-radius: 8px;
+  padding: .8rem .9rem;
+}
+
+.reveal .mrct-card strong {
+  color: #C0249B;
+}
+
+.reveal .mrct-card p {
+  font-size: 1.15rem;
+  line-height: 1.2;
+  margin: .15rem 0 0 0;
+  padding: 0;
+  text-align: left;
+}
+
+.reveal .mrct-formula {
+  background: #fafafa;
+  border-left: 7px solid #20B2AA;
+  border-radius: 8px;
+  margin-top: 1rem;
+  padding: .6rem 1rem;
+}
+
+.reveal .mrct-formula p,
+.reveal .mrct-formula mjx-container {
+  font-size: 1.15rem !important;
+}
+
+.reveal .mrct-image img {
+  max-height: 720px;
+  object-fit: contain;
+}
+
+.reveal .mrct-full img {
+  max-height: 870px;
+  object-fit: contain;
+}
+
+.reveal .mrct-table table {
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+
+.reveal .mrct-quote {
+  border-left: 8px solid #C0249B;
+  color: #525252;
+  font-size: 2.2rem;
+  font-weight: 300;
+  line-height: 1.2;
+  padding-left: 1.1rem;
+  text-align: left;
+}
+
+.reveal .mrct-caption {
+  color: #969696;
+  font-size: 1rem;
+  margin-top: .35rem;
+  text-align: center;
+}
+
+.reveal .mrct-map-frame {
+  border: 0;
+  display: block;
+  height: 860px;
+  margin: 0 auto;
+  width: 100%;
+}
