@@ -314,15 +314,22 @@ Centro de Inteligencia Territorial - UAI
 <h2></h2>
 <h3 id="arquitectura-del-modelo">Arquitectura del modelo</h3>
 <div class="columns">
-<div class="column p_small" style="width:38%;">
+<div class="column p_small" style="width:50%;">
 <p><span class="mrct-kicker">Arquitectura MRCT</span> <span class="mrct-big">Cada etapa toma el producto anterior y agrega una capa de interpretación.</span></p>
+<p><br></p>
 <ul>
-<li>De señal satelital a indicadores territoriales.</li>
-<li>De indicadores a estado ecosistémico.</li>
-<li>De estado a trayectoria, contexto y sensibilidad.</li>
-<li>De trayectoria integrada a prioridad territorial.</li>
+<li><strong>0 Insumos satelitales:</strong> captura señales espectrales base.</li>
+<li><strong>1 Indicadores por cuenca:</strong> resume esas señales como métricas territoriales anuales.</li>
+<li><strong>2 Vector de estado:</strong> integra los indicadores en una posición ecosistémica.</li>
+<li><strong>3 Trayectoria:</strong> mide distancia, velocidad, aceleración y cambios bruscos.</li>
+<li><strong>4 Integración espacial:</strong> compara cada cuenca con su vecindario territorial.</li>
+<li><strong>5 Sensibilidad:</strong> estima respuesta frente a forzantes climáticos.</li>
+<li><strong>6 Prioridad y resiliencia:</strong> sintetiza presión, transición y capacidad de respuesta.</li>
 </ul>
-</div><div class="column" style="width:58%;">
+</div><div class="column p_small_m" style="width:5%;">
+
+</div><div class="column" style="width:45%;">
+<p><br></p>
 <div class="quarto-figure quarto-figure-center">
 <figure>
 <p><img data-src="images/infografia_mrct_hor_w.png" class="quarto-figure quarto-figure-center" style="width:95.0%"></p>
@@ -355,6 +362,7 @@ Centro de Inteligencia Territorial - UAI
 <li>Los índices traducen reflectancia en vegetación, agua, nieve, aridez, albedo y temperatura.</li>
 <li>Para este cálculo, los insumos ya llegan limpios, alineados y listos para agregarse por cuenca.</li>
 </ul>
+<p><a href="https://cit-uai.github.io/Book-MRCT/insumos.html" class="uri">https://cit-uai.github.io/Book-MRCT/insumos.html</a></p>
 </div><div class="column p_small_m" style="width:5%;">
 
 </div><div class="column mrct-image" style="width:50%;">
@@ -382,7 +390,7 @@ Centro de Inteligencia Territorial - UAI
 <h2></h2>
 <h3 id="paso-1-indicadores-base">Paso 1 | Indicadores base</h3>
 <div class="columns">
-<div class="column p_small" style="width:40%;">
+<div class="column p_small" style="width:45%;">
 <p><span class="mrct-kicker">Traducción territorial</span> <span class="mrct-big">Los índices dejan de ser pixeles y pasan a ser señales por cuenca.</span></p>
 <ul>
 <li>Agua, humedad y criósfera describen disponibilidad hídrica y nieve.</li>
@@ -390,9 +398,10 @@ Centro de Inteligencia Territorial - UAI
 <li>Vegetación y energía capturan cobertura, vigor, aridez y carga térmica.</li>
 <li>Cada cuenca queda con una serie anual comparable.</li>
 </ul>
+<p><br> <a href="https://cit-uai.github.io/Book-MRCT/inds_base.html" class="uri">https://cit-uai.github.io/Book-MRCT/inds_base.html</a></p>
 </div><div class="column p_small_m" style="width:10%;">
 
-</div><div class="column mrct-image" style="width:50%;">
+</div><div class="column mrct-image" style="width:45%;">
 <div class="quarto-figure quarto-figure-right">
 <figure>
 <p><img data-src="images/indicadores_base2.png" class="quarto-figure quarto-figure-right" style="width:100.0%"></p>
@@ -428,12 +437,16 @@ Centro de Inteligencia Territorial - UAI
 \mathbf{T} \in \mathbb{R}^{N \times Y \times d}
 \]</span></p>
 <p><code>N</code>: cuencas · <code>Y</code>: años · <code>d</code>: indicadores del estado ecosistémico.</p>
+<p><br> <a href="https://cit-uai.github.io/Book-MRCT/vector_es.html" class="uri">https://cit-uai.github.io/Book-MRCT/vector_es.html</a></p>
 </div><div class="column p_small_m" style="width:10%;">
 
 </div><div class="column mrct-image" style="width:50%;">
+<center>
+<img data-src="images/vector_estado.png" class="quarto-figure quarto-figure-center" style="width:40.0%">
+</center>
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/vector_estado.png" class="quarto-figure quarto-figure-center" style="width:80.0%"></p>
+<p><img data-src="images/cubo.png" class="quarto-figure quarto-figure-center" style="width:100.0%"></p>
 </figure>
 </div>
 </div></div>
@@ -477,6 +490,7 @@ A_t = V_t - V_{t-1}
 J_t = A_t - A_{t-1}
 \]</span></p>
 <p><code>D</code>: distancia al dominio · <code>V</code>: velocidad · <code>A</code>: aceleración · <code>J</code>: cambio brusco de la aceleración.</p>
+<p><br></p>
 </div><div class="column p_small_m" style="width:5%;">
 
 </div><div class="column mrct-image" style="width:52%;">
@@ -484,6 +498,7 @@ J_t = A_t - A_{t-1}
 <center>
 <img data-src="images/f3.png" class="quarto-figure quarto-figure-center" style="width:60.0%">
 </center>
+<p><a href="https://cit-uai.github.io/Book-MRCT/trayectoria.html" class="uri">https://cit-uai.github.io/Book-MRCT/trayectoria.html</a></p>
 </div></div>
 <aside class="notes">
 <p>Explicar que la trayectoria no existe sin la distancia <code>D</code>: primero se define el dominio de referencia y después se calculan diferencias anuales. Dos cuencas con igual distancia actual no significan lo mismo si una se recupera y otra se aleja rápido.</p>
@@ -510,11 +525,11 @@ J_t = A_t - A_{t-1}
 <li>El dominio local compara con las cuencas vecinas.</li>
 <li>KNN usa <strong>8 vecinos</strong> y pesos por distancia.</li>
 </ul>
-<!-- $$ -->
-<!-- \bar{D}_{local,i,t} = -->
-<!-- \sum_{j \in N_k(i)} \tilde{w}_{ij} D_{j,t} -->
-<!-- $$ -->
-<p><img data-src="images/f4.png" class="quarto-figure quarto-figure-center" style="width:100.0%"> <!-- - **Global bajo + local bajo:** condición cercana y coherente. --> <!-- - **Global alto + local bajo:** señal regional compartida. --> <!-- - **Global bajo + local alto:** anomalía local. --> <!-- - **Global alto + local alto:** caso prioritario de revisión. --></p>
+<p><span class="math display">\[
+\bar{D}_{local,i,t} =
+\sum_{j \in N_k(i)} \tilde{w}_{ij} D_{j,t}
+\]</span> <img data-src="images/f4.png" class="quarto-figure quarto-figure-center" style="width:100.0%"> <!-- - **Global bajo + local bajo:** condición cercana y coherente. --> <!-- - **Global alto + local bajo:** señal regional compartida. --> <!-- - **Global bajo + local alto:** anomalía local. --> <!-- - **Global alto + local alto:** caso prioritario de revisión. --></p>
+<p><a href="https://cit-uai.github.io/Book-MRCT/integracion_espacial.html" class="uri">https://cit-uai.github.io/Book-MRCT/integracion_espacial.html</a></p>
 </div><div class="column p_small_m" style="width:10%;">
 
 </div><div class="column" style="width:50%;">
@@ -562,6 +577,7 @@ SENS_i =
 <li>IA: aridez; ALB: albedo; TB: temperatura de brillo.</li>
 <li>Sensibilidad alta no significa peor estado: significa mayor reactividad.</li>
 </ul>
+<p><a href="https://cit-uai.github.io/Book-MRCT/sensibilidad.html" class="uri">https://cit-uai.github.io/Book-MRCT/sensibilidad.html</a></p>
 </div><div class="column" style="width:52%;">
 <p><br></p>
 <center>
@@ -586,7 +602,7 @@ SENS_i =
 <h2></h2>
 <h3 id="paso-6-síntesis-potencial-de-transición-y-resiliencia">Paso 6 | Síntesis: potencial de transición y resiliencia</h3>
 <div class="columns">
-<div class="column p_small" style="width:42%;">
+<div class="column p_small" style="width:50%;">
 <p><span class="mrct-kicker">Síntesis territorial</span> <span class="mrct-big">El resultado combina estado, movimiento, sensibilidad y contexto.</span></p>
 <ul>
 <li><code>PT</code> alto: mayor propensión de transición.</li>
@@ -607,14 +623,20 @@ D_{i,t}
 RES_{i,t} = \frac{1}{1 + PT_{i,t}}
 \]</span></p>
 <p><code>D</code>: alejamiento · <code>|V|</code>: intensidad del cambio · <code>SENS</code>: reactividad · <code>D_local</code>: presión o contraste espacial.</p>
+<p><a href="https://cit-uai.github.io/Book-MRCT/pt_resiliencia.html" class="uri">https://cit-uai.github.io/Book-MRCT/pt_resiliencia.html</a></p>
 </div><div class="column p_small_m" style="width:5%;">
 
-</div><div class="column mrct-image" style="width:52%;">
+</div><div class="column mrct-image" style="width:45%;">
 <p><br> <br></p>
 <center>
 <img data-src="images/f6.png" class="quarto-figure quarto-figure-center" style="width:100.0%">
 </center>
-<!-- ![](images/resultados/mapa_res_pt_2025.png){fig-align="center" width="100%"} -->
+<p><br></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/pt.png" class="quarto-figure quarto-figure-center" style="width:100.0%"></p>
+</figure>
+</div>
 </div></div>
 <aside class="notes">
 <p>Esta es la lámina de cálculo más importante. Mostrar la lógica antes que la fórmula: lejos de referencia, moviéndose rápido, sensible y en entorno presionado aumenta PT.</p>
@@ -646,6 +668,7 @@ RES_{i,t} = \frac{1}{1 + PT_{i,t}}
 <li><code>RES_TYPE</code> agrega dirección: estable, tensionada, recuperación, degradación activa o transición.</li>
 <li>La matriz ordena evidencia y preguntas, no reemplaza validación territorial.</li>
 </ul>
+<p><a href="https://cit-uai.github.io/Book-MRCT/resultados.html" class="uri">https://cit-uai.github.io/Book-MRCT/resultados.html</a></p>
 </div><div class="column mrct-image" style="width:52%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -671,7 +694,7 @@ RES_{i,t} = \frac{1}{1 + PT_{i,t}}
 <h2></h2>
 <h3 id="resultados-2025-lectura-regional-y-comunal">Resultados 2025: lectura regional y comunal</h3>
 <div class="columns">
-<div class="column p_small" style="width:42%;">
+<div class="column p_small" style="width:45%;">
 <p><span class="mrct-kicker">Magallanes 2025</span> <span class="mrct-big">La señal regional es heterogénea y polarizada.</span></p>
 <ul>
 <li>Mediana regional de <code>RES</code>: <strong>0,094</strong>.</li>
@@ -679,10 +702,13 @@ RES_{i,t} = \frac{1}{1 + PT_{i,t}}
 <li><strong>54,5%</strong> de cuencas en colapso potencial.</li>
 <li>Punta Arenas tiene mediana alta, pero fuerte heterogeneidad interna.</li>
 </ul>
-</div><div class="column mrct-image" style="width:52%;">
+<p><a href="https://cit-uai.github.io/Book-MRCT/resultados.html" class="uri">https://cit-uai.github.io/Book-MRCT/resultados.html</a></p>
+</div><div class="column p_small_m" style="width:5%;">
+
+</div><div class="column mrct-image" style="width:50%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="images/resultados/res_mediana_comunal_2025.png" class="quarto-figure quarto-figure-center" style="width:100.0%"></p>
+<p><img data-src="images/resultados/mapa_res_pt_2025.png" class="quarto-figure quarto-figure-center" style="width:100.0%"></p>
 </figure>
 </div>
 <p><span class="mrct-caption">La comparación comunal debe leerse junto con mapas y percentiles.</span></p>
@@ -755,6 +781,7 @@ RES_{i,t} = \frac{1}{1 + PT_{i,t}}
 <li>El ranking combina <code>J</code>, <code>PT</code>, <code>RES</code>, <code>D_local</code>, <code>SENS</code> y accesibilidad.</li>
 <li>La salida es una lista de candidatas, no una ruta final.</li>
 </ul>
+<p><a href="https://cit-uai.github.io/Book-MRCT/jerk.html" class="uri">https://cit-uai.github.io/Book-MRCT/jerk.html</a></p>
 </div><div class="column mrct-image" style="width:52%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -821,6 +848,7 @@ RES_{i,t} = \frac{1}{1 + PT_{i,t}}
 <li>La pregunta de terreno es preventiva: ¿qué cuencas cercanas a infraestructura estratégica ya muestran cambios abruptos?</li>
 <li>Esta capa complementa el ranking, no reemplaza la validación ambiental.</li>
 </ul>
+<p><a href="https://cit-uai.github.io/Book-MRCT/jerk.html#sec-terminales-h2-jerk" class="uri">https://cit-uai.github.io/Book-MRCT/jerk.html#sec-terminales-h2-jerk</a></p>
 </div><div class="column mrct-image" style="width:52%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
@@ -874,9 +902,10 @@ RES_{i,t} = \frac{1}{1 + PT_{i,t}}
 <p><span class="mrct-kicker">Lo que llevamos</span> <span class="mrct-big">La MRCT ya tiene una primera versión funcional.</span></p>
 <ul>
 <li>Primera versión de la <strong>Matriz de Resiliencia Climática Territorial</strong>.</li>
-<li>Librería Python de alto nivel para calcular indicadores y componentes de la matriz.</li>
 <li>Resultados regionales, comunales y casos prioritarios para Punta Arenas.</li>
 <li>Libro digital para documentar metodología, decisiones técnicas y evidencia.</li>
+<li>Librería Python de alto nivel para calcular indicadores y componentes de la matriz.</li>
+<li>Notebooks <strong>Jupyter</strong> con código documentado para calcular la matriz y todos sus subproductos. Además para análisis de resultados, visualizaciones y selección de cuencas prioritarias.</li>
 </ul>
 <p><a href="https://cit-uai.github.io/Book-MRCT/" class="uri">https://cit-uai.github.io/Book-MRCT/</a></p>
 </div><div class="column p_small_m" style="width:10%;">
