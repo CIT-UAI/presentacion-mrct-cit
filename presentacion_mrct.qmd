@@ -840,6 +840,8 @@ Enfatizar que lo pendiente no es sólo calcular más, sino comprobar si las señ
 - Reconocer degradación activa, recuperación y transición.
 - Orientar terreno, monitoreo y conversación técnica.
 
+<https://cit-uai.github.io/Book-MRCT/conclusiones.html>
+
 :::
 
 ::: {.column .mrct-image width="52%"}
